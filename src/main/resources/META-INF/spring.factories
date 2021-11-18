@@ -1,0 +1,1 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.gitee.osinn.mybatis.multi.tenant.plugin.starter.MybatisMultiTenantAutoConfigure

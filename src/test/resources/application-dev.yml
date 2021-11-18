@@ -1,0 +1,20 @@
+server:
+  port: 8880
+
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    initialization-mode: always
+    schema: classpath:test-init.sql
+    hikari:
+      jdbc-url: jdbc:h2:mem:test
+      username: sa
+      password:
+
+mybatis:
+  mapperLocations: classpath*:mapper/**/*.xml
+  typeAliasesPackage: com.gitee.osinn.mybatis.multi.tenant.plugin.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

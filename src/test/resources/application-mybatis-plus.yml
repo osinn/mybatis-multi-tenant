@@ -1,0 +1,28 @@
+#app
+server:
+  port: 8080
+
+#spring
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    initialization-mode: always
+    schema: classpath:test-init.sql
+    hikari:
+      jdbc-url: jdbc:h2:mem:test
+      username: sa
+      password:
+
+mybatis-plus:
+  mapper-locations: classpath*:mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+    cache-enabled: true
+    lazy-loading-enabled: true
+    multiple-result-sets-enabled: true
+    use-generated-keys: true
+    default-statement-timeout: 60
+    default-fetch-size: 100
+  type-aliases-package: com.example.mybatis.multi.demo.entity

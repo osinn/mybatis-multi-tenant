@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gitee.osinn.mybatis.multi.tenant.plugin.mapper.UserMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="pageResultMap" type="com.gitee.osinn.mybatis.multi.tenant.plugin.entity.UserEntity">
+        <id column="id" property="id" />
+        <result column="username" property="username" />
+        <result column="password" property="password" />
+        <result column="tenant_id" property="tenantId" />
+        <collection property="roleList" ofType="com.gitee.osinn.mybatis.multi.tenant.plugin.entity.RoleEntity">
+            <id column="r_id" property="id" />
+            <result column="r_name" property="name" />
+            <result column="r_tenant_id" property="tenantId" />
+        </collection>
+    </resultMap>
+    <insert id="batchSave">
+        INSERT INTO `user` (`id`,`username`,`password`) VALUES
+        <foreach collection="userList" item="userItem" separator=",">
+            (#{userItem.id},#{userItem.username},#{userItem.password})
+        </foreach>
+    </insert>
+    <insert id="save">
+        INSERT INTO `user` (`id`,`username`,`password`) VALUES(#{id},#{username},#{password}),(23,'test','testssss')
+    </insert>
+    <update id="updateById">
+        update user set username=#{username},password=#{password} where id=#{id}
+    </update>
+
+
+    <select id="selectTestWhere" resultType="com.gitee.osinn.mybatis.multi.tenant.plugin.entity.UserEntity">
+                <![CDATA[
+        SELECT * FROM user WHERE 1=1 and id = #{id}
+        ]]>
+    </select>
+    <select id="fetchUserAndRole" resultMap="pageResultMap">
+        SELECT
+            u.*,
+            r.id as r_id,
+            r.name as r_name
+        FROM
+            `user` u
+            LEFT JOIN user_role ur ON ur.user_id = u.id
+            LEFT JOIN `role` r ON r.id = ur.role_id
+    </select>
+
+    <select id="fetchUserByRoleId" resultType="com.gitee.osinn.mybatis.multi.tenant.plugin.entity.UserEntity">
+        SELECT
+            u.*
+        FROM
+            `user` u
+                JOIN user_role r ON u.id = r.user_id and r.role_id=#{roleId}
+
+    </select>
+
+    <select id="checkUserName" resultType="java.lang.Boolean">
+        SELECT EXISTS
+                   ( SELECT * FROM `user` WHERE username = #{userName}) d
+    </select>
+    <select id="testUnionSelect" resultType="com.gitee.osinn.mybatis.multi.tenant.plugin.entity.UserEntity">
+        SELECT * FROM `user` union SELECT id,account as username,`password`,tenant_id FROM account
+    </select>
+
+    <delete id="deleteByUserId">
+        delete from user where id in ( select id from user s where id=#{id})
+    </delete>
+
+    <delete id="deleteById">
+        delete from user where id =#{id}
+    </delete>
+
+    <delete id="deleteTestIgnoreTenantIdById">
+        delete from user where id =#{id}
+    </delete>
+
+    <select id="testMybatisPlusPage" resultType="com.gitee.osinn.mybatis.multi.tenant.plugin.entity.UserEntity">
+        SELECT * FROM user where 1=1
+    </select>
+    <select id="selectAll" resultType="com.gitee.osinn.mybatis.multi.tenant.plugin.entity.UserEntity">
+        SELECT * FROM `user`
+    </select>
+</mapper>
