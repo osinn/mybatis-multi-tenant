@@ -1,3 +1,6 @@
+# 本项目已经停止维护
+- 请使用 druid-multi-tenant-starter，地址https://github.com/osinn/druid-multi-tenant-starter
+
 # mybatis-multi-tenant-spring-boot-starter
 > mybatis 多租户插件，开箱即用，支持单个租户以及多个租户
 
